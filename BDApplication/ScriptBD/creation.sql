@@ -1,0 +1,10 @@
+/* creation de la table animal*/
+CREATE TABLE Animal(
+Id INT NOT NULL AUTO_INCREMENT,
+Type VARCHAR(20) NOT NULL,
+Nom VARCHAR(20) NOT NULL,
+Age INT NOT NULL,
+Poids INT NOT NULL,
+Couleur VARCHAR(20) NOT NULL,
+Proprietaire VARCHAR(60) NOT NULL,
+PRIMARY KEY(Id));
