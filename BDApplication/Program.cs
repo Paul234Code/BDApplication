@@ -75,8 +75,8 @@ namespace BDApplication
         private void StartTheMachine()
         {
             string choice;
-            bool stop = true;
-            while (stop)
+            bool stop = false;
+            while (!stop)
             {
                 Console.WriteLine("Enter votre choix ou taper CTRL+C pour quitter");
                 choice = Console.ReadLine();
@@ -207,7 +207,6 @@ namespace BDApplication
             string nomProprietaireAnimal = Console.ReadLine();
             var animal = new Animal() { Type = type, Nom = nomAnimal, Age = ageAnimal, Poids = poidsAnimal, Couleur = couleurAnimal, Proprietaire = nomProprietaireAnimal };
             return animal;
-
         }
         // fonction qui permet de saisir les donnés a modifier
         public Animal SaisieDonnesModifier()
@@ -230,6 +229,7 @@ namespace BDApplication
             Animal animal = SaisieDonnesModifier();
             UpdateToDatabase(animal);           
         }
+        // Fonction qui update dans la base de donnée
         public void UpdateToDatabase(Animal animal)
         {
             Console.WriteLine("Entrer l'Identifiant de l'animal");
