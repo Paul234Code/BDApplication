@@ -209,13 +209,14 @@ namespace BDApplication
             Console.WriteLine("Entrer l'Identifiant de l'animal");
             int Id = Convert.ToInt32(Console.ReadLine());
             MySqlConnection connection = objetConnection.ConnectToDatabase();
-            string request = "UPDATE animal SET Nom = @nom, Age = @age,Poids = @poids,Couleur = @couleur,Proprietaire = @proprietaire";
+            string request = "UPDATE animal SET Nom = @nom, Age = @age,Poids = @poids,Couleur = @couleur,Proprietaire = @proprietaire WHERE Id = @Id";
             MySqlCommand mySqlCommand = new MySqlCommand(request, connection);
             mySqlCommand.Parameters.AddWithValue("@Nom", nom);
             mySqlCommand.Parameters.AddWithValue("@Age", age);
             mySqlCommand.Parameters.AddWithValue("@Poids", poids);
             mySqlCommand.Parameters.AddWithValue("@Couleur", couleur);
             mySqlCommand.Parameters.AddWithValue("@Proprietaire", proprietaire);
+            mySqlCommand.Parameters.AddWithValue("@Id", Id);
             mySqlCommand.ExecuteReader();
             connection.Close();
             Console.WriteLine("Requete UPDATE terminé ");
