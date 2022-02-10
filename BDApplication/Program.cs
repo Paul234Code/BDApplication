@@ -119,12 +119,12 @@ namespace BDApplication
             string request = "INSERT INTO animal(Type,Nom,Age,Poids,Couleur,Proprietaire)" +
                              "VALUES(@Type,@Nom,@Age,@Poids,@Couleur,@Proprietaire)";
             MySqlCommand mySqlCommand = new MySqlCommand(request, connection);
-            mySqlCommand.Parameters.AddWithValue("@Type", type);
-            mySqlCommand.Parameters.AddWithValue("@Nom", nomAnimal);
-            mySqlCommand.Parameters.AddWithValue("@Age", ageAnimal);
-            mySqlCommand.Parameters.AddWithValue("@Poids", poidsAnimal);
-            mySqlCommand.Parameters.AddWithValue("@Couleur", couleurAnimal);
-            mySqlCommand.Parameters.AddWithValue("@Proprietaire", nomProprietaireAnimal);
+            mySqlCommand.Parameters.AddWithValue("@Type", animal.Type);
+            mySqlCommand.Parameters.AddWithValue("@Nom", animal.Nom);
+            mySqlCommand.Parameters.AddWithValue("@Age", animal.Age);
+            mySqlCommand.Parameters.AddWithValue("@Poids", animal.Poids);
+            mySqlCommand.Parameters.AddWithValue("@Couleur", animal.Couleur);
+            mySqlCommand.Parameters.AddWithValue("@Proprietaire", animal.Proprietaire);
             mySqlCommand.ExecuteReader();
             connection.Close();
             Console.WriteLine("Requete INSERT INTO terminé ");
@@ -209,13 +209,14 @@ namespace BDApplication
             Console.WriteLine("Entrer l'Identifiant de l'animal");
             int Id = Convert.ToInt32(Console.ReadLine());
             MySqlConnection connection = objetConnection.ConnectToDatabase();
-            string request = "UPDATE animal SET Nom = @nom, Age = @age,Poids = @poids,Couleur = @couleur,Proprietaire = @proprietaire";
+            string request = "UPDATE animal SET Nom = @nom, Age = @age,Poids = @poids,Couleur = @couleur,Proprietaire = @proprietaire WHERE Id = @Id";
             MySqlCommand mySqlCommand = new MySqlCommand(request, connection);
             mySqlCommand.Parameters.AddWithValue("@Nom", nom);
             mySqlCommand.Parameters.AddWithValue("@Age", age);
             mySqlCommand.Parameters.AddWithValue("@Poids", poids);
             mySqlCommand.Parameters.AddWithValue("@Couleur", couleur);
             mySqlCommand.Parameters.AddWithValue("@Proprietaire", proprietaire);
+            mySqlCommand.Parameters.AddWithValue("@Id", Id);
             mySqlCommand.ExecuteReader();
             connection.Close();
             Console.WriteLine("Requete UPDATE terminé ");
