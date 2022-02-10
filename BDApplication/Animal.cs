@@ -19,6 +19,11 @@ namespace BDApplication
         {
 
         }
+        // Fonction qui affiche un animal
+        public void DisplayAnimal()
+        {
+            Console.WriteLine($"Type : {Type}\nNom : {Nom}\nAge : {Age}\nPoids : {Poids}\nCouleur : {Couleur}\nProprietaire : {Proprietaire}");
+        }
 
     }
 }
