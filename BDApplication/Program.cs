@@ -75,7 +75,8 @@ namespace BDApplication
         private void StartTheMachine()
         {
             string choice;
-            while (true)
+            bool stop = true;
+            while (stop)
             {
                 Console.WriteLine("Enter votre choix ou taper CTRL+C pour quitter");
                 choice = Console.ReadLine();
@@ -92,29 +93,13 @@ namespace BDApplication
         // En demandant a l'utilisateur de saisir les informations d'un animal
         private void AjouterAnimal()
         {
-            Console.WriteLine("Veuillez saisir le type de l'animal: ");
-            var type = Console.ReadLine();
-            Console.WriteLine("Veuillez saisir le nom de l'animal: ");
-            var nomAnimal = Console.ReadLine();
-            Console.WriteLine("Veuillez saisir l'age de l'animal: ");
-            var ageAnimal = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Veuillez saisir le poids de l'animal:");
-            var poidsAnimal = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Veuillez saisir la couleur de l'animal: ");
-            var couleurAnimal = Console.ReadLine().ToLower();
-            if (!ValidationCouleur(couleurAnimal))
-                AfficherMessageErreur("votre couleur n'est pas valide.........");
-            while (!ValidationCouleur(couleurAnimal))
-            {
-                Console.WriteLine("Veuillez saisir la couleur de l'animal: ");
-                couleurAnimal = Console.ReadLine().ToLower();
-                if (!ValidationCouleur(couleurAnimal))
-                    AfficherMessageErreur("votre couleur n'est pas valide.........");
-            }
-            Console.WriteLine("Veuillez saisir le nom du proprietaire de l'animal: ");
-            var nomProprietaireAnimal = Console.ReadLine();
-            var animal = new Animal() { Type = type, Nom = nomAnimal, Age = ageAnimal, Poids = poidsAnimal, Couleur = couleurAnimal, Proprietaire = nomProprietaireAnimal };
+            Animal animal = CreateAnimal();            
             listeOfAnimal.Add(animal);
+            AddAnimalToDatabase(animal);          
+        }
+        // Fonction qui insere un animal dans la base de donnee
+        public void AddAnimalToDatabase(Animal animal)
+        {
             MySqlConnection connection = objetConnection.ConnectToDatabase();
             string request = "INSERT INTO animal(Type,Nom,Age,Poids,Couleur,Proprietaire)" +
                              "VALUES(@Type,@Nom,@Age,@Poids,@Couleur,@Proprietaire)";
@@ -193,8 +178,39 @@ namespace BDApplication
             }
             connection.Close();
         }
-        // Fonction qui modifie un animal dans la base de donnée
-        private void Modifier()
+        /// <summary>
+        /// Fonction qui cree un animal 
+        /// </summary>
+        /// <returns>et retoune une reference</returns>
+        public Animal CreateAnimal()
+        {
+            Console.WriteLine("Veuillez saisir le type de l'animal: ");
+            string type = Console.ReadLine();
+            Console.WriteLine("Veuillez saisir le nom de l'animal: ");
+            string nomAnimal = Console.ReadLine();
+            Console.WriteLine("Veuillez saisir l'age de l'animal: ");
+            int ageAnimal = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Veuillez saisir le poids de l'animal:");
+            int poidsAnimal = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Veuillez saisir la couleur de l'animal: ");
+            string couleurAnimal = Console.ReadLine().ToLower();
+            if (!ValidationCouleur(couleurAnimal))
+                AfficherMessageErreur("votre couleur n'est pas valide.........");
+            while (!ValidationCouleur(couleurAnimal))
+            {
+                Console.WriteLine("Veuillez saisir la couleur de l'animal: ");
+                couleurAnimal = Console.ReadLine().ToLower();
+                if (!ValidationCouleur(couleurAnimal))
+                    AfficherMessageErreur("votre couleur n'est pas valide.........");
+            }
+            Console.WriteLine("Veuillez saisir le nom du proprietaire de l'animal: ");
+            string nomProprietaireAnimal = Console.ReadLine();
+            var animal = new Animal() { Type = type, Nom = nomAnimal, Age = ageAnimal, Poids = poidsAnimal, Couleur = couleurAnimal, Proprietaire = nomProprietaireAnimal };
+            return animal;
+
+        }
+        // fonction qui permet de saisir les donnés a modifier
+        public Animal SaisieDonnesModifier()
         {
             Console.WriteLine("Entrer le nouveau nom");
             string nom = Console.ReadLine();
@@ -206,16 +222,26 @@ namespace BDApplication
             string couleur = Console.ReadLine();
             Console.WriteLine("Entrer le nouveau proprietaire");
             string proprietaire = Console.ReadLine();
+            return new Animal() { Type = null, Nom = nom, Age = age, Poids = poids, Couleur = couleur, Proprietaire = proprietaire };
+        }
+        // Fonction qui modifie un animal dans la base de donnée
+        private void Modifier()
+        {
+            Animal animal = SaisieDonnesModifier();
+            UpdateToDatabase(animal);           
+        }
+        public void UpdateToDatabase(Animal animal)
+        {
             Console.WriteLine("Entrer l'Identifiant de l'animal");
             int Id = Convert.ToInt32(Console.ReadLine());
             MySqlConnection connection = objetConnection.ConnectToDatabase();
             string request = "UPDATE animal SET Nom = @nom, Age = @age,Poids = @poids,Couleur = @couleur,Proprietaire = @proprietaire WHERE Id = @Id";
             MySqlCommand mySqlCommand = new MySqlCommand(request, connection);
-            mySqlCommand.Parameters.AddWithValue("@Nom", nom);
-            mySqlCommand.Parameters.AddWithValue("@Age", age);
-            mySqlCommand.Parameters.AddWithValue("@Poids", poids);
-            mySqlCommand.Parameters.AddWithValue("@Couleur", couleur);
-            mySqlCommand.Parameters.AddWithValue("@Proprietaire", proprietaire);
+            mySqlCommand.Parameters.AddWithValue("@Nom", animal.Nom);
+            mySqlCommand.Parameters.AddWithValue("@Age", animal.Age);
+            mySqlCommand.Parameters.AddWithValue("@Poids", animal.Poids);
+            mySqlCommand.Parameters.AddWithValue("@Couleur", animal.Couleur);
+            mySqlCommand.Parameters.AddWithValue("@Proprietaire", animal.Proprietaire);
             mySqlCommand.Parameters.AddWithValue("@Id", Id);
             mySqlCommand.ExecuteReader();
             connection.Close();
@@ -284,8 +310,8 @@ namespace BDApplication
         }
         // Fonction qui valide la couleur de l'animal
         private bool ValidationCouleur(string couleur)
-        {
-            return couleur == "bleu" || couleur == "rouge" || couleur == "violet";
+        { 
+            return couleur.Equals("bleu") || couleur.Equals("rouge") || couleur.Equals("violet");
         }
     }
 }
