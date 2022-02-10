@@ -119,12 +119,12 @@ namespace BDApplication
             string request = "INSERT INTO animal(Type,Nom,Age,Poids,Couleur,Proprietaire)" +
                              "VALUES(@Type,@Nom,@Age,@Poids,@Couleur,@Proprietaire)";
             MySqlCommand mySqlCommand = new MySqlCommand(request, connection);
-            mySqlCommand.Parameters.AddWithValue("@Type", type);
-            mySqlCommand.Parameters.AddWithValue("@Nom", nomAnimal);
-            mySqlCommand.Parameters.AddWithValue("@Age", ageAnimal);
-            mySqlCommand.Parameters.AddWithValue("@Poids", poidsAnimal);
-            mySqlCommand.Parameters.AddWithValue("@Couleur", couleurAnimal);
-            mySqlCommand.Parameters.AddWithValue("@Proprietaire", nomProprietaireAnimal);
+            mySqlCommand.Parameters.AddWithValue("@Type", animal.Type);
+            mySqlCommand.Parameters.AddWithValue("@Nom", animal.Nom);
+            mySqlCommand.Parameters.AddWithValue("@Age", animal.Age);
+            mySqlCommand.Parameters.AddWithValue("@Poids", animal.Poids);
+            mySqlCommand.Parameters.AddWithValue("@Couleur", animal.Couleur);
+            mySqlCommand.Parameters.AddWithValue("@Proprietaire", animal.Proprietaire);
             mySqlCommand.ExecuteReader();
             connection.Close();
             Console.WriteLine("Requete INSERT INTO terminé ");
