@@ -6,8 +6,8 @@ namespace BDApplication
 {
     public class Program
     {
-        Connection objetConnection = new Connection();
-        List<Animal> listeOfAnimal = new List<Animal>();
+        readonly Connection objetConnection = new Connection();
+        readonly List<Animal> listeOfAnimal = new List<Animal>();
         static void Main()
         {
             Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -97,9 +97,9 @@ namespace BDApplication
             Console.WriteLine("Veuillez saisir le nom de l'animal: ");
             var nomAnimal = Console.ReadLine();
             Console.WriteLine("Veuillez saisir l'age de l'animal: ");
-            var ageAnimal = Console.ReadLine();
+            var ageAnimal = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Veuillez saisir le poids de l'animal:");
-            var poidsAnimal = Console.ReadLine();
+            var poidsAnimal = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Veuillez saisir la couleur de l'animal: ");
             var couleurAnimal = Console.ReadLine().ToLower();
             if (!ValidationCouleur(couleurAnimal))
@@ -113,6 +113,8 @@ namespace BDApplication
             }
             Console.WriteLine("Veuillez saisir le nom du proprietaire de l'animal: ");
             var nomProprietaireAnimal = Console.ReadLine();
+            var animal = new Animal() { Type = type, Nom = nomAnimal, Age = ageAnimal, Poids = poidsAnimal, Couleur = couleurAnimal, Proprietaire = nomProprietaireAnimal };
+            listeOfAnimal.Add(animal);
             MySqlConnection connection = objetConnection.ConnectToDatabase();
             string request = "INSERT INTO animal(Type,Nom,Age,Poids,Couleur,Proprietaire)" +
                              "VALUES(@Type,@Nom,@Age,@Poids,@Couleur,@Proprietaire)";
@@ -148,11 +150,8 @@ namespace BDApplication
                 }
             }
             connection.Close();
-        }
-        /*
-         * Une fonction de type void
-         * qui affiche la liste des proprietaires des animaux pensionnaires
-         */
+        }      
+         // Une fonction  qui affiche la liste des proprietaires des animaux pensionnaires        
         private void VoirListePropriétaire()
         {
             Console.WriteLine("-------------------------");
