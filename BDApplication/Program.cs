@@ -178,10 +178,7 @@ namespace BDApplication
             }
             connection.Close();
         }
-        /// <summary>
-        /// Fonction qui cree un animal 
-        /// </summary>
-        /// <returns>et retoune une reference</returns>
+        //Retourn une reference sur un animal
         public Animal CreateAnimal()
         {
             Console.WriteLine("Veuillez saisir le type de l'animal: ");
