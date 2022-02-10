@@ -287,7 +287,5 @@ namespace BDApplication
         {
             return couleur == "bleu" || couleur == "rouge" || couleur == "violet";
         }
-
-
     }
 }
